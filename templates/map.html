@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>It's Mappening!</title>
+
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+
+    <style type="text/css">
+
+        html { height: 100% }
+        body { height: 100%; margin: 0; padding: 0 }
+        #map-canvas { height: 100% }
+        
+        .popup-image {
+            max-width: 200px;
+        }
+
+    </style>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCoLytorjtsJg3AF2rUCuM35cE8JvEbeZE"></script>
+
+    <script type="text/javascript">
+
+        // Anonymous function to get data from external JSON file
+        (function() 
+        {
+            var json_data = "/static/data.json";
+
+            $.getJSON( json_data, {
+                tags: "mount rainier",
+                tagmode: "any",
+                format: "json"
+            })
+            .done(function( data ) 
+            {
+                // assign the data to the global json_data var;
+                draw_map( data );
+            });
+
+        })();
+
+        // custom wrapper
+        function draw_map( data )
+        {
+
+            // Maps Junk
+            function initialize() 
+            {
+                var mapOptions = {
+                  center: new google.maps.LatLng( 43.707594 , -79.304810 ),
+                  zoom: 10
+                };
+
+                // draw the map
+                var map = new google.maps.Map( document.getElementById("map-canvas") , mapOptions);
+
+                // create a reusable info window
+                var infowindow = new google.maps.InfoWindow();
+
+                // draw the markers
+                for( var i = 0 , length = data.length ; i < length ; i++ ) {
+
+                    // need a closure to preserve the value of i
+                    (function( index_value )
+                    {
+                        var index = index_value;
+                        var item = data[index];
+
+                        console.log( "individual item: " , item );
+
+                        // generate a coordinate pair for each item in the json list
+                        var coordinates = new google.maps.LatLng( item.latitude , item.longitude );
+
+                        // create a marker on the map
+                        var marker = new google.maps.Marker({
+                            position: coordinates,
+                            map: map,
+                            title: item.name
+                            /*icon: item.pic_url*/
+                        });
+                        
+                        // event listener for the marker
+                        google.maps.event.addListener(marker, 'click', function() 
+                        {
+                            console.log( marker.getPosition() );
+
+                            // zoom on the area when user clicks a point on the map
+                            map.setZoom(11);
+                            map.setCenter(marker.getPosition());
+
+                            // create popup content
+                            var content_string = 
+                                '<h4>' + item.name + '</h4>' +  
+                                '<img class="popup-image" src="' + item.pic_url + '" alt="item.title"/>' +
+                                '<p>' + item.star + '</p>';
+
+                            // set the content of the popup on click
+                            infowindow.setContent( content_string );
+
+                            // open the info window at the right time/place
+                            infowindow.open( map , marker );
+                        });
+                    
+                    })( i ); // call the closure with the index value assigned
+
+                }
+            }
+
+            // Draw the map when the page has loaded
+            // google.maps.event.addDomListener(window, 'load', initialize);
+            initialize();
+
+        }
+
+    </script>
+
+</head>
+<body>
+
+    <h1> Caulk! </h1>
+    <div id="map-canvas"/>
+
+</body>
+</html>
+

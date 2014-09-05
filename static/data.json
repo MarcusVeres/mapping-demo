@@ -1,0 +1,24 @@
+[
+    {
+        "name" : "Foofball",
+        "latitude" : "43.707594",
+        "longitude" : "-79.304810",
+        "pic_url" : "http://www.picshunger.com/wp-content/uploads/2014/05/Kitten-Or-Puppy.jpg",
+        "star" : "Fluffy"
+    },
+    {
+        "name" : "Basket",
+        "latitude" : "43.755225",
+        "longitude" : "-79.557495",
+        "pic_url" : "http://www.st-andrews.ac.uk/nightline/wp-content/uploads/puppies.jpeg",
+        "star" : "Various"
+    },
+    {
+        "name" : "Cupcake",
+        "latitude" : "43.612217",
+        "longitude" : "-79.623413",
+        "pic_url" : "http://9pixs.com/wp-content/uploads/2014/06/puppies_14041641751.jpg",
+        "star" : "Sparky"
+    }
+]
+
